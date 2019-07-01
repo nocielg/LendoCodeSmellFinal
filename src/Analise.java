@@ -73,7 +73,7 @@ public class Analise  {
 		            linha = br.readLine();
 		            System.out.println(linha);  
 		        }
-			  br.close();
+			  br.close();//
 			} catch (FileNotFoundException fnf) {
 			  JOptionPane.showMessageDialog(null, "O arquivo não foi encontrado.", "Carregando o arquivo", JOptionPane.INFORMATION_MESSAGE);
 			}
