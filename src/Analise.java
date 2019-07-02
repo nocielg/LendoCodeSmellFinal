@@ -17,10 +17,9 @@ import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.FunctionNode;
 
 
-//
+
 public class Analise  {
-	//final Set<String> names = new HashSet<String>();
-	//String script = "function abc(x,y) {return x+y;}";
+
 	String script = "var o = {\n" +
             "  _x: 123, " +
             "                       get x() {" +
@@ -39,7 +38,91 @@ public class Analise  {
             + "this._x = value;\n" +
             "  }" +
             "};";
-	private static final int MAX_METHODO_TAMANHO = 50;
+	
+	String script2 = "function Carro()\n" + 
+			"{\n" + 
+			"  var Marca = \"Sem marca\";\n" + 
+			"  var Modelo = \"Sem modelo\";\n" + 
+			"  this.SetMarca = SetMarca;\n" + 
+			"  this.SetModelo = SetModelo;\n" + 
+			"  this.ShowMarca = DisplayMarca;\n" + 
+			"  this.ShowModelo = DisplayModelo; \n" + 
+			"      \n" + 
+			"  function DisplayMarca(){\n" + 
+			"    alert(Marca);\n" + 
+			"  }\n" + 
+			"    \n" + 
+			"  function DisplayModelo(){\n" + 
+			"    alert(Modelo);\n" + 
+			"  }\n" + 
+			"    \n" + 
+			"  function SetMarca(_marca) {\n" + 
+			"    Marca = _marca;\n" + 
+			"  }\n" + 
+			"    \n" + 
+			"  function SetModelo(_modelo) {\n" + 
+			"      Modelo = _modelo;\n" + 
+			"  }\n" + 
+			"    \n" + 
+			"  }";
+	
+	String script3 = "function exibirMensagem()\n" + 
+			"{\n" + 
+			"  alert('Olá, seja bem vindo(a)!');\n" + 
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"  alert('Olá, seja bem vindo(a)!');\n" +
+			"}";
+	
+	// A fonte das métricas foi o artigo: "JSNOSE: Detecting JavaScript Code Smells"
+	private static final int MAX_METHODO_TAMANHO = 50; 
 	private static final int MIN_OBJECTO_PROPRIEDADES = 3;
 	private int profundidadeFuncaoAnterior = 0;
 	private static final int TAMANHO_MAXIMO_DO_SCOPE_CHAIN = 3;
@@ -52,21 +135,21 @@ public class Analise  {
 	FunctionNode f = (FunctionNode) ASTNode;
 	private String linha;
 	
-	public Analise() throws IOException {
 		
-				
+	//Realiza análise sintática e gera a AST do código armazenado na variável script
+	public void geraASTScript() throws IOException {
 		// Realizando a análise sintática e gerando a AST
-		CompilerEnvirons environment = new CompilerEnvirons();
-		Parser parser = new Parser(environment);
-		//lendoArquivoComCodigo();
-	    astRoot = parser.parse(new StringReader(script), null, 1);
-		//astRoot = parser.parse(new StringReader(linha), null, 1);
-		
+				CompilerEnvirons environment = new CompilerEnvirons();
+				Parser parser = new Parser(environment);
+				astRoot = parser.parse(new StringReader(script), null, 1);
+				//astRoot = parser.parse(new StringReader(linha), null, 1);
 	}
 	
+			
 	//Lendo o arquivo com o código
-	public void lendoArquivoComCodigo() throws IOException {
+	public void lendoArquivoComCodigoJavaScript() throws IOException {
 		try {
+			
 			 BufferedReader br = new BufferedReader(new FileReader("/home/gleisson/eclipse-workspace/LendoCodeSmellFinal/src/javascript")); 
 			//BufferedReader br = new BufferedReader(new FileReader("/home/gleisson/eclipse-workspace/LendoCodeSmellFinal/src/SmellReport.txt"));
 		        while (br.ready()) {
@@ -79,6 +162,44 @@ public class Analise  {
 			}
 	}
 	
+	//Gera a AST do código armazenado na variável script 2
+	//Realiza análise sintática e gera a AST do código armazenado na variável script2
+	public void geraASTScript2() throws IOException {
+		// Realizando a análise sintática e gerando a AST
+		CompilerEnvirons environment = new CompilerEnvirons();
+		Parser parser = new Parser(environment);
+		System.out.println(script2);
+		astRoot = parser.parse(new StringReader(script2), null, 1);
+		
+	}
+	
+	//Gera a AST do código armazenado na variável script 3
+	//Realiza análise sintática e gera a AST do código armazenado na variável script3
+	public void geraASTScript3() throws IOException {
+		// Realizando a análise sintática e gerando a AST
+		CompilerEnvirons environment = new CompilerEnvirons();
+		Parser parser = new Parser(environment);
+		System.out.println(script3);
+		astRoot = parser.parse(new StringReader(script3), null, 1);
+		
+	}
+	/*
+	public void lendoArquivoComCodigoSmellReport() throws IOException {
+		try {
+			
+			 //BufferedReader br = new BufferedReader(new FileReader("/home/gleisson/eclipse-workspace/LendoCodeSmellFinal/src/javascript")); 
+			BufferedReader br = new BufferedReader(new FileReader("/home/gleisson/eclipse-workspace/LendoCodeSmellFinal/src/SmellReport.txt"));
+		        while (br.ready()) {
+		            linha = br.readLine();
+		            System.out.println(linha);  
+		        }
+			  br.close();//
+			} catch (FileNotFoundException fnf) {
+			  JOptionPane.showMessageDialog(null, "O arquivo não foi encontrado.", "Carregando o arquivo", JOptionPane.INFORMATION_MESSAGE);
+			}
+	}*/
+	
+	//testando a biblioteca
 	public void testando() {
 		Context context = Context.enter();
 		try {
@@ -95,6 +216,7 @@ public class Analise  {
 		}
 	}
 	
+	//testando a biblioteca
 	public void testeAvaliandoString() {
 		Context cx = Context.enter();
         Scriptable scope = cx.initStandardObjects();
@@ -109,82 +231,52 @@ public class Analise  {
 	}
 	
 	public void identificaFaltaDeIdentacaoeIdenta() throws IOException {
-		//CompilerEnvirons environment = new CompilerEnvirons();
-		//Parser parser = new Parser(environment);
-	    //astRoot = parser.parse(new StringReader(script), null, 1);
+		System.out.println("Foi identificado o code smell causado pela falta de indentação e o código foi indentado.");
+		System.out.println("");
 		System.out.println(astRoot.toSource());
 	    
 	}
 	
 	//Detecta LongMethod
 	public void detectaLongMethod() {
-		//FunctionNode f = (FunctionNode) ASTNode;
-		//CompilerEnvirons environment = new CompilerEnvirons();
-		//Parser parser = new Parser(environment);
-	    //astRoot = parser.parse(new StringReader(script), null, 1);
-		
 		
 		int tamanhodaFuncao = astRoot.getEndLineno() - astRoot.getLineno();
 		if (tamanhodaFuncao > MAX_METHODO_TAMANHO) {
-			System.out.println(tamanhodaFuncao);
+			System.out.println("O código possui o code smell Long Method");
 			
 		}
 		else {
-			System.out.println("O método não possui o code smell Long Method");
+			System.out.println("O código não possui o code smell Long Method");
 			
 		}
-		System.out.println("O tamanho da função é:" + tamanhodaFuncao);
+		
+		System.out.println("-----------------------------------------------------------------------------");
 	}
 	
-	//dúvida
+	
 	//Detecta nested function
 	public void detectaClosureSmell() throws IOException {
-		/*script = "foo(42) { (x: Int) in\n" + 
-				"    bar(x) { (x: Int) in\n" + 
-				"      foobar(x) { // Noncompliant\n" + 
-				"        print(x * 42)\n" + 
-				"			foobar(x,y) {"+
-				"      			foobar(x,y,g) {\"+\n" + 
-				"							}\\n\" + 	" +
-				"						}\n" + 
-				"      print(x + 42)\n" + 
-				"    }\n" + 
-				"    print(x - 42)\n" + 
-				"}";
-		*/		
 		
-		script = "function A(x) { "+
-			   "function B(y) {"+
-				      "function C(z) {"+
-				        " alert(x + y + z);"+
-				      "}"+
-				      "C(3);"+
-				   "}"+
-				   "B(2);"+
-				"}"+
-				"A(1);";
-				
-		//int fDepth = ASTNode.depth(); //astRoot.depth();
 		int fDepth = astRoot.depth();
 		//String name = astRoot.shortName();
 		
 		if(fDepth > profundidadeFuncaoAnterior) {
 			scopeChainLength++;
 			if(scopeChainLength>TAMANHO_MAXIMO_DO_SCOPE_CHAIN) {
-				System.out.println("O método possui closure smell" );
-				System.out.println(fDepth);
+				System.out.println("O código possui closure smell" );
+				
 			}
 			else {
-				System.out.println("O método não possui closure smell");
-				System.out.println(fDepth);
+				System.out.println("O código não possui closure smell");
+				
 			}
 		}
 		else {
-			System.out.println(fDepth);
-			System.out.println("O método não possui closure smell");
+			System.out.println("O código não possui closure smell");
 			scopeChainLength = 1;
 		}
 		profundidadeFuncaoAnterior = fDepth;
+		System.out.println("-----------------------------------------------------------------------------");
 		
 	}
 	
@@ -192,14 +284,14 @@ public class Analise  {
 	public void detectaGodClass() {
 		int tamanhodaClasse = astRoot.getEndLineno() - astRoot.getLineno();
 		if (tamanhodaClasse > Max_LINHAS_GOD_CLASS) {
-			System.out.println("O método possui o code smell God Class");
+			System.out.println("O código possui o code smell God Class");
 			
 		}
 		else {
-			System.out.println("O método não possui o code smell God Class");
+			System.out.println("O código não possui o code smell God Class");
 			
 		}
-		System.out.println("O tamanho da classe é: " + tamanhodaClasse);
+		System.out.println("-----------------------------------------------------------------------------");
 	}
 	
 	
